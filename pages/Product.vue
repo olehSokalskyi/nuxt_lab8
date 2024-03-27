@@ -1,5 +1,5 @@
 <template>
-  <h1 class="text-center text-3xl my-[2%]">Student List</h1>
+  <h1 class="text-center text-3xl my-[2%]">Product List</h1>
   <div class="mx-[3%] my-[2%]">
     <div class="flex justify-between items-center w-full px-4 py-3">
     </div>
@@ -18,52 +18,72 @@
     </div>
     <UTable :rows="rows"
             :columns="columns"
+            :loading="pending"
             :loading-state="{ icon: 'i-heroicons-arrow-path-20-solid', label: 'Loading...' }"
             :progress="{ color: 'primary', animation: 'carousel' }"
-    />
+    >
+      <template #rating-data="{ row }">
+        <span
+            :style="{ color: row.rating > 4.5 ? 'green' : 'red' }">
+            {{ row.rating }}
+        </span>
+      </template>
+      <template #thumbnail-data="{ row }">
+        <img class="w-[100px] h-[100px]" :src="row.thumbnail" alt="Thumbnail" />
+      </template>
+    </UTable>
   </div>
 </template>
 
 <script setup lang="ts">
+const { pending,  data } = await useLazyAsyncData<any>('products',()=> $fetch('https://dummyjson.com/products') as any);
 
-
-const StudentList = [
-  {id: 1, FName: 'John', SName: 'Doe', Group: 'A'},
-  {id: 2, FName: 'Jane', SName: 'Doe', Group: 'B'},
-  {id: 3, FName: 'John', SName: 'Smith', Group: 'A'},
-  {id: 4, FName: 'John', SName: 'Doe', Group: 'A'},
-  {id: 5, FName: 'Jane', SName: 'Doe', Group: 'B'},
-  {id: 6, FName: 'John', SName: 'Smith', Group: 'A'},
-  {id: 7, FName: 'John', SName: 'Doe', Group: 'A'},
-  {id: 8, FName: 'Jane', SName: 'Doe', Group: 'B'},
-  {id: 9, FName: 'John', SName: 'Smith', Group: 'A'},
-
-]
+const products = data.value.products;
 
 const columns = [{
   key: 'id',
   label: 'ID',
   sortable: true
 }, {
-  key: 'FName',
-  label: 'FName',
+  key: 'title',
+  label: 'Title',
   sortable: true
 
 }, {
-  key: 'SName',
-  label: 'FName',
+  key: 'description',
+  label: 'Description',
   sortable: true
 },{
-  key:'Group',
-  label: 'Group',
+  key:'rating',
+  label: 'Rating',
   sortable: true
+}, {
+  key: 'price',
+  label: 'Price',
+  sortable: true
+
+}, {
+  key: 'brand',
+  label: 'Brand',
+  sortable: true
+
+},{
+  key: 'category',
+  label: 'Category',
+  sortable: true
+
+},{
+  key:"thumbnail",
+  label: "Thumbnail"
 }]
+
+
 const q = ref('')
 const page = ref(1)
 const pageCount = 5
 
 const filteredRows = computed(() => {
-  return StudentList.filter((product: any) => {
+  return products.filter((product: any) => {
     return Object.values(product).some((value) => {
       return String(value).toLowerCase().includes(q.value.toLowerCase())
     })
@@ -72,10 +92,10 @@ const filteredRows = computed(() => {
 
 const rows = computed(() => {
   if (!q.value) {
-    return StudentList.slice((page.value - 1) * pageCount, (page.value) * pageCount)
+    return products.slice((page.value - 1) * pageCount, (page.value) * pageCount)
   }
 
-  return StudentList.filter((person: any) => {
+  return products.filter((person: any) => {
     return Object.values(person).some((value) => {
       return String(value).toLowerCase().includes(q.value.toLowerCase())
     })
