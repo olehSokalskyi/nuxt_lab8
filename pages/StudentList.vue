@@ -25,7 +25,9 @@
 </template>
 
 <script setup lang="ts">
-
+useHead({
+  title: 'Student List'
+})
 
 const StudentList = [
   {id: 1, FName: 'John', SName: 'Doe', Group: 'A'},

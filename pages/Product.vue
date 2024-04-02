@@ -16,7 +16,10 @@
           :total="filteredRows.length"
       />
     </div>
-    <UTable :rows="rows"
+    <UTable
+            v-model:sort="sort"
+            sort-mode="manual"
+            :rows="rows"
             :columns="columns"
             :loading="pending"
             :loading-state="{ icon: 'i-heroicons-arrow-path-20-solid', label: 'Loading...' }"
@@ -36,9 +39,15 @@
 </template>
 
 <script setup lang="ts">
+useHead({
+  title: 'Product List'
+})
 const { pending,  data } = await useLazyAsyncData<any>('products',()=> $fetch('https://dummyjson.com/products') as any);
 
+
+
 const products = data.value.products;
+//document.title = 'Product List'
 
 const columns = [{
   key: 'id',
@@ -90,15 +99,39 @@ const filteredRows = computed(() => {
   })
 })
 
-const rows = computed(() => {
-  if (!q.value) {
-    return products.slice((page.value - 1) * pageCount, (page.value) * pageCount)
+const sort = ref({ column: 'id', direction: 'asc' as const })
+
+const sortedRows = computed(() => {
+  const sortedProducts = [...products]
+  const { column, direction } = sort.value
+
+  if (column && direction) {
+    sortedProducts.sort((a, b) => {
+      const aValue = a[column]
+      const bValue = b[column]
+      if (aValue < bValue) return direction === 'asc' ? -1 : 1
+      if (aValue > bValue) return direction === 'asc' ? 1 : -1
+      return 0
+    })
   }
 
-  return products.filter((person: any) => {
-    return Object.values(person).some((value) => {
-      return String(value).toLowerCase().includes(q.value.toLowerCase())
+  return sortedProducts
+})
+
+const rows = computed(() => {
+  let filteredProducts = [...sortedRows.value]
+
+  if (q.value) {
+    filteredProducts = filteredProducts.filter(product => {
+      return Object.values(product).some(value => {
+        return String(value).toLowerCase().includes(q.value.toLowerCase())
+      })
     })
-  })
+  }
+
+  const startIndex = (page.value - 1) * pageCount
+  const endIndex = startIndex + pageCount
+
+  return filteredProducts.slice(startIndex, endIndex)
 })
 </script>
