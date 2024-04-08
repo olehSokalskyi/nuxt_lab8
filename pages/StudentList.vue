@@ -16,7 +16,10 @@
           :total="filteredRows.length"
       />
     </div>
-    <UTable :rows="rows"
+    <UTable
+            v-model:sort="sort"
+            sort-mode="manual"
+            :rows="rows"
             :columns="columns"
             :loading-state="{ icon: 'i-heroicons-arrow-path-20-solid', label: 'Loading...' }"
             :progress="{ color: 'primary', animation: 'carousel' }"
@@ -64,6 +67,8 @@ const q = ref('')
 const page = ref(1)
 const pageCount = 5
 
+
+
 const filteredRows = computed(() => {
   return StudentList.filter((product: any) => {
     return Object.values(product).some((value) => {
@@ -71,16 +76,37 @@ const filteredRows = computed(() => {
     })
   })
 })
+const sort = ref({ column: 'id', direction: 'asc' as const })
 
-const rows = computed(() => {
-  if (!q.value) {
-    return StudentList.slice((page.value - 1) * pageCount, (page.value) * pageCount)
+const sortedRows = computed(() => {
+  const sortedProducts = [...StudentList]
+  const { column, direction } = sort.value
+
+  if (column && direction) {
+    sortedProducts.sort((a: any, b: any) => {
+      const aValue = a[column]
+      const bValue = b[column]
+      if (aValue < bValue) return direction === 'asc' ? -1 : 1
+      if (aValue > bValue) return direction === 'asc' ? 1 : -1
+      return 0
+    })
   }
 
-  return StudentList.filter((person: any) => {
-    return Object.values(person).some((value) => {
-      return String(value).toLowerCase().includes(q.value.toLowerCase())
+  return sortedProducts
+})
+const rows = computed(() => {
+  let filteredtudents = [...sortedRows.value]
+  if (q.value) {
+    filteredtudents = filteredtudents.filter(student => {
+      return Object.values(student).some(value => {
+        return String(value).toLowerCase().includes(q.value.toLowerCase())
+      })
     })
-  })
+  }
+
+  const startIndex = (page.value - 1) * pageCount
+  const endIndex = startIndex + pageCount
+
+  return filteredtudents.slice(startIndex, endIndex)
 })
 </script>

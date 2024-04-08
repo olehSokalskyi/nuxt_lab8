@@ -14,6 +14,6 @@ const links = [{
       <span class="group-hover:text-primary relative">{{ link.label }}</span>
     </template>
   </UVerticalNavigation>
-  <router-view/>
+  <NuxtPage/>
 </template>
 
