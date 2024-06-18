@@ -1,7 +1,8 @@
 <template>
-  <BlogPosts/>
+  <BlogPostsUI/>
 </template>
 
 <script setup lang="ts">
-import BlogPosts from "~/pages/BlogPosts.vue";
+
+import BlogPostsUI from "~/pages/BlogPostsUI.vue";
 </script>

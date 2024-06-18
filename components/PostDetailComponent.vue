@@ -44,10 +44,13 @@ interface Post {
   category: Category,
   is_published: boolean;
 }
-interface User{
+interface User {
+  id:number;
   name: string;
 }
-interface Category{
+
+interface Category {
+  id:number;
   title: string;
 }
 

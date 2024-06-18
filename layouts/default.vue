@@ -7,6 +7,9 @@ const id = Number(route.params.id)
 const links = [{
   label: 'StudentList',
   to: '/StudentList'
+},{
+  label: 'BlogPostsUI',
+  to: '/BlogPostsUI'
 }]
 </script>
 <template>

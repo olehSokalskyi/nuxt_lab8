@@ -91,13 +91,13 @@ interface Category{
 }
 const posts = ref<Post[]>([]);
 
-    const getPosts = async () => {
-       $fetch<Post[]>('http://localhost:8000/api/blog/posts')
-          .then(response => {
-            console.log(response);
-            posts.value = response;
+const getPosts = async () => {
+  $fetch<Post[]>('http://localhost:8000/api/blog/posts/forComboBox')
+      .then(response => {
+        console.log(response);
+        posts.value = response;
 
-          });
+      });
 };
 
 getPosts();
@@ -151,64 +151,64 @@ getPosts();
   overflow-x: auto;
 }
 .table {
-width: 100%;
-border-collapse: collapse;
-background-color: #3a3a3a;
-box-sizing: border-box;
-border-radius: 8px;
-overflow: hidden;
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #3a3a3a;
+  box-sizing: border-box;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .table th,
 .table td {
-padding: 12px 10px;
-border-bottom: 1px solid #555;
-text-align: left;
-color: white;
+  padding: 12px 10px;
+  border-bottom: 1px solid #555;
+  text-align: left;
+  color: white;
 }
 
 .table th {
-background-color: #4a4a4a;
-font-weight: bold;
+  background-color: #4a4a4a;
+  font-weight: bold;
 }
 
 .table td a {
-color: #66bfff;
-text-decoration: none;
+  color: #66bfff;
+  text-decoration: none;
 }
 
 .table td a:hover {
-text-decoration: underline;
+  text-decoration: underline;
 }
 
 .pagination {
-display: flex;
-justify-content: center;
-margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .pagination button {
-margin: 0 5px;
-padding: 8px 16px;
-border: 1px solid #444;
-background-color: #333;
-color: white;
-cursor: pointer;
-border-radius: 4px;
-transition: background-color 0.2s;
+  margin: 0 5px;
+  padding: 8px 16px;
+  border: 1px solid #444;
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
 }
 
 .pagination button:hover {
-background-color: #555;
+  background-color: #555;
 }
 
 .pagination button.active {
-background-color: #007bff;
-color: white;
+  background-color: #007bff;
+  color: white;
 }
 
 .pagination button:disabled {
-background-color: #444;
-cursor: not-allowed;
+  background-color: #444;
+  cursor: not-allowed;
 }
 </style>
