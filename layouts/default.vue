@@ -1,10 +1,14 @@
 <script setup lang="ts">
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const id = Number(route.params.id)
+
 const links = [{
   label: 'StudentList',
   to: '/StudentList'
 }]
 </script>
-
 <template>
   <UHorizontalNavigation :links="links">
     <template #default="{ link }">

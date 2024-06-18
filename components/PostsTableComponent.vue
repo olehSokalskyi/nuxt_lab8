@@ -30,6 +30,7 @@
                 <th>Заголовок</th>
 
                 <th>Дата публікації</th>
+                <th>Деталі</th>
 
               </tr>
 
@@ -49,6 +50,9 @@
 
                 <td>{{post.published_at}}
 
+                </td>
+                <td>
+                  <router-link :to="`/BlogPostDetail/${post.id}`">Detail</router-link>
                 </td>
 
               </tr>
