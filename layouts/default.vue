@@ -1,19 +1,19 @@
 <script setup lang="ts">
 const links = [{
   label: 'StudentList',
-  to: 'StudentList'
-}, {
-  label: 'Product',
-  to: 'Product'
+  to: '/StudentList'
 }]
 </script>
 
 <template>
-  <UVerticalNavigation :links="links">
+  <UHorizontalNavigation :links="links">
     <template #default="{ link }">
-      <span class="group-hover:text-primary relative">{{ link.label }}</span>
+      <span class="group-hover:text-primary relative">{{link.label}}</span>
     </template>
-  </UVerticalNavigation>
-  <NuxtPage/>
+  </UHorizontalNavigation>
+  <router-view/>
 </template>
 
+<style>
+
+</style>

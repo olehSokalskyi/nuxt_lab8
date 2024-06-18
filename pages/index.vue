@@ -1,4 +1,7 @@
 <template>
-  <h1>Select product or student pages</h1>
+  <BlogPosts/>
 </template>
 
+<script setup lang="ts">
+import BlogPosts from "~/pages/BlogPosts.vue";
+</script>
