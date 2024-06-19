@@ -27,6 +27,10 @@
               <input type="text" class="w-full p-2 border rounded" id="title" v-model="post.title" readonly>
             </div>
             <div class="form-group mb-4">
+              <label for="category" class="block text-gray-100">Category</label>
+              <input type="text" class="w-full p-2 border rounded" id="category" v-model="post.category.title" readonly>
+            </div>
+            <div class="form-group mb-4">
               <label for="user" class="block text-gray-100">User</label>
               <input type="text" class="w-full p-2 border rounded" id="user" v-model="post.user.name" readonly>
             </div>

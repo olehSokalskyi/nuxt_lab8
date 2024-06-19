@@ -90,7 +90,7 @@ const items = (post: Post) => [
     {
       label: 'Edit',
       icon: 'i-heroicons-pencil-square-20-solid',
-      click: () => window.location.href = (`/posts/update/${post.id}`)
+      click: () => window.location.href = (`/posts/edit/${post.id}`)
     },
     {
       label: 'Details',
@@ -104,15 +104,15 @@ const items = (post: Post) => [
       icon: 'i-heroicons-trash-20-solid',
       click: () => {
         if (confirm(`Are you sure you want to delete post '${post.title}'?`)) {
-          axios.delete(`${API_SERVER_URL}/api/blog/posts/${post.id}`)
+          axios.delete(`${API_SERVER_URL}/api/blog/posts/delete/${post.id}`)
               .then(res => {
                 console.log(res);
                 alert('Post deleted!');
-                getPosts();
+                getPosts(page.value);
               })
               .catch(error => {
                 console.error(error);
-                alert('Failed to delete post!');
+                alert('Failed to delete posts!');
               });
         }
       }

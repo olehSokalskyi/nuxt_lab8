@@ -9,7 +9,10 @@ const links = [{
   to: '/StudentList'
 },{
   label: 'BlogPostsUI',
-  to: '/BlogPostsUI'
+  to: '/posts/'
+},{
+  label: 'Categories',
+  to: '/categories/'
 }]
 </script>
 <template>
@@ -18,7 +21,7 @@ const links = [{
       <span class="group-hover:text-primary relative">{{link.label}}</span>
     </template>
   </UHorizontalNavigation>
-  <router-view/>
+  <RouterView />
 </template>
 
 <style>

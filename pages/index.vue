@@ -4,5 +4,5 @@
 
 <script setup lang="ts">
 
-import BlogPostsUI from "~/pages/BlogPostsUI.vue";
+import BlogPostsUI from "~/pages/posts/index.vue";
 </script>
