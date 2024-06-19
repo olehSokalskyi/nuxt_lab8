@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-col">
+    <UNotifications />
     <div class="me-5">
       <NuxtLink to="/categories/create">
         <button class="bg-transparent hover:bg-blue-500 float-end text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
@@ -24,7 +25,6 @@
 
 <script setup lang="ts">
 import { API_SERVER_URL } from '../../untils/constants';
-import axios from "axios";
 import { ref, computed, watch } from 'vue';
 
 interface Category {
@@ -33,6 +33,7 @@ interface Category {
   parent_category: Category | null;
   parent_id: number;
 }
+const toast = useToast()
 
 const columns = [
   { key: 'id', label: '#' },
@@ -48,10 +49,10 @@ const totalCategories = ref(0);
 console.log(totalPages.value);
 const getCategories = async (page = 1) => {
   try {
-    const response = await axios.get(`${API_SERVER_URL}/api/blog/categories?page=${page}`);
-    categories.value = response.data.data;
-    totalPages.value = response.data.last_page;
-    totalCategories.value = response.data.total;
+    const response = await await $fetch(`${API_SERVER_URL}/api/blog/categories?page=${page}`);
+    categories.value = response.data;
+    totalPages.value = response.last_page;
+    totalCategories.value = response.total;
     console.log(response)
   } catch (error) {
     console.error('Error fetching categories:', error);
@@ -68,7 +69,7 @@ const rows = computed(() => {
   return categories.value.map(category => ({
     id: category.id,
     title: category.title,
-    parent_category_title: category.parent_category?.title ?? 'N/A'
+    parent_category_title: category.parent_category ? category.parent_category.title : 'N/A'
   }));
 });
 
@@ -90,18 +91,19 @@ const items = (category: Category) => [
       label: 'Видалити',
       icon: 'i-heroicons-trash-20-solid',
       click: () => {
-        if (confirm(`Ви впевнені, що хочете видалити категорію '${category.title}'?`)) {
-          axios.delete(`${API_SERVER_URL}/api/blog/categories/delete/${category.id}`)
+          $fetch(`${API_SERVER_URL}/api/blog/categories/delete/${category.id}`, {
+            method: 'DELETE',
+            body: { id: category.id }
+          })
               .then(res => {
                 console.log(res);
-                alert('Категорію видалено!');
+                toast.add({ title: 'Success',description:"Category was deleted" })
                 getCategories(page.value);
               })
               .catch(error => {
                 console.error(error);
                 alert('Не вдалось видалити категорію!');
               });
-        }
       }
     }
   ]

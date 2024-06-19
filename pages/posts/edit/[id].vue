@@ -69,7 +69,6 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import axios from 'axios';
 import { z } from 'zod';
 import { API_SERVER_URL } from '../../../untils/constants';
 
@@ -113,8 +112,8 @@ const backToIndex = () => {
 
 const getCategories = async () => {
   try {
-    const response = await axios.get(`${API_SERVER_URL}/api/blog/categories/forCombobox`);
-    categories.value = response.data;
+    const response = await $fetch(`${API_SERVER_URL}/api/blog/categories/forCombobox`);
+    categories.value = response;
   } catch (error) {
     console.error('Failed to fetch categories:', error);
   }
@@ -122,8 +121,8 @@ const getCategories = async () => {
 
 const fetchPost = async () => {
   try {
-    const response = await axios.get(`${API_SERVER_URL}/api/blog/posts/${route.params.id}`);
-    const postData = response.data;
+    const response = await $fetch(`${API_SERVER_URL}/api/blog/posts/${route.params.id}`);
+    const postData = response;
     Object.assign(state, {
       title: postData.title,
       content_raw: postData.content_raw,
@@ -151,17 +150,19 @@ const submitPost = async () => {
     const postData = {
       ...validatedData,
       category_id: validatedData.category_id,
-      is_published: validatedData.is_published
+      is_published: validatedData.is_published,
+      id : route.params.id
     };
+  console.log(postData)
+    await $fetch(`${API_SERVER_URL}/api/blog/posts/edit/${route.params.id}`,{
+      method: 'PUT',
+      body:  postData
 
-    await axios.put(`${API_SERVER_URL}/api/blog/posts/edit/${route.params.id}`, postData, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
     });
 
     router.push('/posts/');
   } catch (error) {
+    console.log(4324)
     console.error('Failed to submit post:', error);
   }
 };

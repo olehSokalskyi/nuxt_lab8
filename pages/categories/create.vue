@@ -31,7 +31,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
 import {useRoute, useRouter} from 'vue-router';
 import {z} from "zod";
 import {API_SERVER_URL} from "~/untils/constants";
@@ -77,8 +76,8 @@ const pcategories = ref<Category[]>([]);
 
 const getCategories = async () => {
   try {
-    const response = await axios.get(`${API_SERVER_URL}/api/blog/categories/forCombobox`);
-    pcategories.value = response.data;
+    const response = await $fetch(`${API_SERVER_URL}/api/blog/categories/forCombobox`);
+    pcategories.value = response;
   } catch (error) {
     console.error('Failed to fetch categories:', error);
   }
@@ -89,10 +88,10 @@ onMounted(() => {
 const submitPost = async () => {
   try {
     console.log(state)
-    await axios.post(`${API_SERVER_URL}/api/blog/categories/create`, state, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    const validatedData = schema.parse(state);
+    await $fetch(`${API_SERVER_URL}/api/blog/categories/create`, {
+      method: 'POST',
+      body:  validatedData
     });
     router.push('/categories/');
   } catch (error) {

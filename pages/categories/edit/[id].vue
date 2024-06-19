@@ -30,7 +30,6 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
-import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
 import { z } from 'zod';
 import { API_SERVER_URL } from '~/untils/constants';
@@ -69,8 +68,8 @@ const pcategories = ref<Category[]>([]);
 
 const getCategories = async () => {
   try {
-    const response = await axios.get(`${API_SERVER_URL}/api/blog/categories/forCombobox`);
-    pcategories.value = response.data;
+    const response = await $fetch(`${API_SERVER_URL}/api/blog/categories/forCombobox`);
+    pcategories.value = response;
   } catch (error) {
     console.error('Failed to fetch categories:', error);
   }
@@ -78,8 +77,8 @@ const getCategories = async () => {
 
 const fetchCategory = async () => {
   try {
-    const response = await axios.get(`${API_SERVER_URL}/api/blog/categories/${id}`);
-    const category = response.data;
+    const response = await $fetch(`${API_SERVER_URL}/api/blog/categories/${id}`);
+    const category = response;
     Object.assign(state, {
       title: category.title,
       description: category.description,
@@ -99,10 +98,9 @@ onMounted(async () => {
 const submitPost = async () => {
   try {
     const validatedData = schema.parse(state);
-    await axios.put(`${API_SERVER_URL}/api/blog/categories/edit/${id}`, validatedData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    await $fetch(`${API_SERVER_URL}/api/blog/categories/edit/${id}`, {
+      method: 'PUT',
+      body:  validatedData
     });
     router.push('/categories/');
   } catch (error) {

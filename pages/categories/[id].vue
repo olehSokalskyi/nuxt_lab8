@@ -57,8 +57,8 @@ const category = ref<Category>();
 
 const getCategory = async (id: number) => {
   try {
-    const response = await axios.get(`http://localhost:8000/api/blog/categories/${id}`);
-    category.value = response.data;
+    const response = await $fetch(`http://localhost:8000/api/blog/categories/${id}`);
+    category.value = response;
   } catch (error) {
     console.error('Failed to fetch category:', error);
   }
